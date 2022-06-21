@@ -1,8 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { login, signup } from "../controllers/doctorsController";
+import { doctorInfo, login, signup } from "../controllers/doctorsController";
 import { Doctors } from "../models/doctorsModel";
 import validator from "../utils/validator";
 import { doctorsSignupSchema, doctorLoginSchema } from "../utils/validatorSchema";
+import isAuth from "../middlewares/authenication";
 
 const router = Router();
 
@@ -20,5 +21,7 @@ router.post("/login", (req: Request<any, any, {email: string, password: string}>
 
     next();
 }, login);
+
+router.get("/info", isAuth, doctorInfo);
 
 export default router;

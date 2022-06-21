@@ -48,7 +48,8 @@ export const signup = async (req: Request<any, any, Doctors>, res: Response) => 
             msg: "Account created successfully, Pls login"
         });
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json({ msg: "An error occured, Try again later!" });
+        // res.status(500).json(err);
     }
 }
 
@@ -73,3 +74,22 @@ export const login = async (req: Request<any, any, { email: string, password: st
         res.status(500).json({ msg: "An error occured, Try again later!" });
     }
 };
+
+export const doctorInfo = async (req: Request, res: Response<any, Doctors>) => {
+    try {
+        const doctorInfo = {
+            email: res.locals.email,
+            name: res.locals.name,
+            speciality: res.locals.speciality,
+            appointmentDays: res.locals.appointmentDays,
+            availableTimeStart: res.locals.availableTimeStart,
+            availableTimeEnd: res.locals.availableTimeEnd
+        };
+
+        res.json(doctorInfo);
+
+    } catch (err) {
+        res.status(500).json({ msg: "An error occured, Try again later!" });
+        // res.status(500).json(err);
+    }
+}

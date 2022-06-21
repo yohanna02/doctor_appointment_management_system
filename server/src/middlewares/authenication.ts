@@ -21,5 +21,4 @@ const isAuth = async (req: Request, res: Response<any, Doctors>, next: NextFunct
         return res.status(401).json({ msg: "unAuthorize" });
     }
 };
-
-module.exports = isAuth;
+export default isAuth;
