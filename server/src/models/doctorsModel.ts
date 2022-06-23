@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-type appointmentDays = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday";
+export type appointmentDays = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday";
 
 export interface Doctors {
     name: string;
@@ -10,6 +10,7 @@ export interface Doctors {
     availableTimeEnd: Date;
     email: string;
     password: string;
+    makeAppointment: boolean;
 };
 
 const doctorsSchema = new Schema<Doctors>({
@@ -23,11 +24,11 @@ const doctorsSchema = new Schema<Doctors>({
     },
     appointmentDays: [],
     availableTimeStart: {
-        type: Schema.Types.Date,
+        type: Date,
         required: true
     },
     availableTimeEnd: {
-        type: Schema.Types.Date,
+        type: Date,
         required: true
     },
     email: {
@@ -37,6 +38,10 @@ const doctorsSchema = new Schema<Doctors>({
     password: {
         type: String,
         required: true
+    },
+    makeAppointment: {
+        type: Boolean,
+        default: false
     }
 });
 

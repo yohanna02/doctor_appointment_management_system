@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import doctorsModel, { Doctors } from "../models/doctorsModel"
+import { scheduleAppointment } from "../jobs/appointmentJobs";
 
 export const signup = async (req: Request<any, any, Doctors>, res: Response) => {
     try {
@@ -43,13 +44,25 @@ export const signup = async (req: Request<any, any, Doctors>, res: Response) => 
 
         await newDoctor.save();
 
+        const doctor = await doctorsModel.findOne({ email });
+        console.log(req.body);
+
+        if (doctor) {
+            await scheduleAppointment(
+                appointmentDays, 
+                availableTimeStart, 
+                availableTimeEnd, 
+                doctor._id
+            );
+        }
+
         res.json({
             status: "OK",
             msg: "Account created successfully, Pls login"
         });
     } catch (err) {
-        res.status(500).json({ msg: "An error occured, Try again later!" });
-        // res.status(500).json(err);
+        // res.status(500).json({ msg: "An error occured, Try again later!" });
+        res.status(500).json(err);
     }
 }
 
