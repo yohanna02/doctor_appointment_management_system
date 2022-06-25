@@ -21,14 +21,16 @@ mongoose.connect(process.env.DB_CONNECT as string)
 });
 
 export const agenda = new Agenda({ db: { address: process.env.DB_CONNECT as string } });
-initAppointmentJob(agenda);
-agenda.start();
+(async function () {
+    initAppointmentJob(agenda);
+    await agenda.start();
+})();
 
 app.use(express.json());
 app.use(cors());
 
 app.use("/api/v1/doctor", doctorsApi);
-app.use("/api/v1/appointent", appointmentApi);
+app.use("/api/v1/appointment", appointmentApi);
 
 app.use((req, res) => {
     res.send("<h1>NOT FOUND</h1>");

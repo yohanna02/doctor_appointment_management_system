@@ -42,7 +42,7 @@ const appointmentSchema = new Schema<Appointment>({
     },
     done: {
         type: Boolean,
-        required: true
+        default: false
     }
 });
 

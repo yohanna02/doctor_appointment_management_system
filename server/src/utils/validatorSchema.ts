@@ -1,4 +1,5 @@
 import joi from "joi";
+import { Appointment } from "../models/appointmentsModel";
 import { Doctors } from "../models/doctorsModel";
 
 export const doctorsSignupSchema = joi.object<Doctors>({
@@ -14,4 +15,15 @@ export const doctorsSignupSchema = joi.object<Doctors>({
 export const doctorLoginSchema = joi.object<{email: string, password: string}>({
     email: joi.string().email().required(),
     password: joi.string().min(8).required()
+});
+
+
+
+export const appoinmentSchema = joi.object<Appointment>({
+   personName: joi.string().required(),
+   email: joi.string().email().required(),
+   phoneNo: joi.string().required(),
+   date: joi.date().required(),
+   reason: joi.string().required(),
+   doctorId: joi.string().required()
 });

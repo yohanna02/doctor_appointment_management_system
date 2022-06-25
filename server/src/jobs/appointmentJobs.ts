@@ -4,9 +4,11 @@ import { agenda } from "../app";
 import { Appointment } from "../models/appointmentsModel";
 import doctorsModel, { appointmentDays, Doctors } from "../models/doctorsModel";
 import sendMail from "../utils/sendMail";
+import sendSMS from "../utils/sendSMS";
 
 enum JobDefination {
-    APPOINMENT_REMINDER = "APPOINMENT_REMINDER",
+    EMAIL_APPOINMENT_REMINDER = "EMAIL_APPOINMENT_REMINDER",
+    SMS_APPOINTMENT_REMINDER = "SMS_APPOINTMENT_REMINDER",
     START_DOCTORS_APPOINMENT = "START_DOCTORS_APPOINMENT",
     STOP_DOCTORS_APPOINMENT = "STOP_DOCTORS_APPOINMENT"
 };
@@ -21,8 +23,8 @@ const getClockTime = (day: string, date: Date) => {
     if (hour > 12) { hour = hour - 12; }
     if (hour === 0) { hour = 12; }
     if (hour < 10) { hour = hour; }
-    const timeString = `${day} at ${hour}:${minute}${ap}`;
-    return timeString;
+    
+    return `${day} at ${hour}:${minute}${ap}`;
 }
 
 export const scheduleAppointment = async (
@@ -32,37 +34,76 @@ export const scheduleAppointment = async (
     doctorId: mongoose.Types.ObjectId) => {
 
     days.forEach(async (day) => {
-        console.log(day);
-        await agenda.every(
-            getClockTime(day, startTime),
+        const jobStartTime = getClockTime(day, startTime);
+        const jobStopTime = getClockTime(day, endTime);
+
+        await agenda.schedule(
+            jobStartTime,
             JobDefination.START_DOCTORS_APPOINMENT,
-            { _id: doctorId }
+            { _id: doctorId, jobStartTime }
         );
 
-        await agenda.every(
-            getClockTime(day, endTime),
+        await agenda.schedule(
+            jobStopTime,
             JobDefination.STOP_DOCTORS_APPOINMENT,
-            { _id: doctorId }
+            { _id: doctorId, jobStopTime }
         );
     });
 }
 
+export const scheduleEmailReminder = async (appointment: Appointment) => {
+    const now = new Date();
+    const appointmentTime = new Date(appointment.date);
+
+    if (now.getHours() === appointmentTime.getHours() || now.getHours() > appointmentTime.getHours()) return;
+
+    appointmentTime.setHours(appointmentTime.getHours() - 1); // minus 1 hour from the appointment time
+
+    agenda.schedule(appointmentTime, JobDefination.EMAIL_APPOINMENT_REMINDER, { appointment });
+}
+
+export const scheduleSmsReminder = async (appointment: Appointment) => {
+    const now = new Date();
+    const appointmentTime = new Date(appointment.date);
+
+    if (now.getHours() === appointmentTime.getHours() || now.getHours() > appointmentTime.getHours()) return;
+
+    appointmentTime.setHours(appointmentTime.getMinutes() - 30); // minus 30 minute from the appointment time
+
+    agenda.schedule(appointmentTime, JobDefination.SMS_APPOINTMENT_REMINDER, { appointment });
+}
+
 const initAppointmentJob = (agenda: Agenda) => {
-    agenda.define(JobDefination.APPOINMENT_REMINDER, async (job: Job) => {
-        const { email, doctorId, appointmentId, personName } = job.attrs.data as Appointment;
+    agenda.define(JobDefination.EMAIL_APPOINMENT_REMINDER, async (job: Job) => {
+        const { email, doctorId, appointmentId, personName } = job.attrs.data?.appointment as Appointment;
         const doctor = await doctorsModel.findById(doctorId);
 
         if (!doctor) return;
 
         const mailBody = `
             <p>Hello, ${personName}</p>
-            <p>Your appointment with doctor with ${doctor.name} is remaining 1 Hour.</p>
+            <p>Your appointment with doctor ${doctor.name} is in 1 Hour.</p>
             <p>This is your appointment ID: <b style="color: red;">${appointmentId}</b></p>
             <p>Thank you. 👍🏽</p>
         `;
         await sendMail(email, "Appointment Reminder", mailBody);
     });
 
+    agenda.define(JobDefination.SMS_APPOINTMENT_REMINDER, async (job: Job) => {
+        console.log(job.attrs.data);
+        const { email, doctorId, appointmentId, personName } = job.attrs.data?.appointment as Appointment;
+        const doctor = await doctorsModel.findById(doctorId);
+
+        if (!doctor) return;
+
+        const mailBody = `
+            <p>Hello, ${personName}</p>
+            <p>Your appointment with doctor ${doctor.name} is in 30 Minutes.</p>
+            <p>This is your appointment ID: <b style="color: red;">${appointmentId}</b></p>
+            <p>Thank you. 👍🏽</p>
+        `;
+        await sendMail(email, "Appointment Reminder", mailBody);
+    });
 
     agenda.define(JobDefination.START_DOCTORS_APPOINMENT, async (job: Job) => {
         if (job.attrs.data) {
@@ -72,6 +113,9 @@ const initAppointmentJob = (agenda: Agenda) => {
                 doctor.makeAppointment = true;
                 doctor.save();
             }
+
+            job.repeatAt(`next week ${job.attrs.data.jobStartTime}`);
+            await job.save();
         }
     });
 
@@ -83,6 +127,9 @@ const initAppointmentJob = (agenda: Agenda) => {
                 doctor.makeAppointment = false;
                 doctor.save();
             }
+
+            job.repeatAt(`next week ${job.attrs.data.jobStopTime}`);
+            await job.save();
         }
     });
 }

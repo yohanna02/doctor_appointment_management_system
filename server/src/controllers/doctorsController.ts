@@ -45,7 +45,6 @@ export const signup = async (req: Request<any, any, Doctors>, res: Response) => 
         await newDoctor.save();
 
         const doctor = await doctorsModel.findOne({ email });
-        console.log(req.body);
 
         if (doctor) {
             await scheduleAppointment(

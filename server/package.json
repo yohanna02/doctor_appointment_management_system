@@ -21,7 +21,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.8",
     "nodemailer": "^6.7.5",
-    "randomstring": "^1.2.2"
+    "randomstring": "^1.2.2",
+    "twilio": "^3.77.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
