@@ -1,44 +1,25 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import "./styles/App.scss";
+import Index from "./pages/Index";
+import Login from "./pages/Login";
+import Registeration from "./pages/Registration";
+import DoctorDashBoard from "./pages/DoctorsDashboard";
+import Appointment from "./pages/Appoinment";
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+          <Route exact path="/" element={<Index />} />
+          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/register" element={<Registeration isShowAllowed={true} isFullParentWidthAllowed="" headerValue="Registerer" />} />
+          <Route exact path="/doctordashboard" element={<DoctorDashBoard />} />
+          <Route exact path="/doctordashboard/appointment" element={<Appointment />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   )
 }
 
