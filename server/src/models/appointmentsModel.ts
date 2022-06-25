@@ -9,6 +9,7 @@ export interface Appointment {
     doctorId: Schema.Types.ObjectId;
     appointmentId: string;
     done: boolean;
+    doctorsNote: string;
 };
 
 const appointmentSchema = new Schema<Appointment>({
@@ -43,7 +44,8 @@ const appointmentSchema = new Schema<Appointment>({
     done: {
         type: Boolean,
         default: false
-    }
+    },
+    doctorsNote: String
 });
 
 const appointmentModel = model<Appointment>("appointment", appointmentSchema);

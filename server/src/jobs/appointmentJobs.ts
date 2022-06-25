@@ -1,10 +1,9 @@
 import { Agenda, Job } from "agenda";
 import mongoose from "mongoose";
 import { agenda } from "../app";
-import { Appointment } from "../models/appointmentsModel";
+import appointmentModel, { Appointment } from "../models/appointmentsModel";
 import doctorsModel, { appointmentDays, Doctors } from "../models/doctorsModel";
 import sendMail from "../utils/sendMail";
-import sendSMS from "../utils/sendSMS";
 
 enum JobDefination {
     EMAIL_APPOINMENT_REMINDER = "EMAIL_APPOINMENT_REMINDER",
@@ -130,6 +129,13 @@ const initAppointmentJob = (agenda: Agenda) => {
 
             job.repeatAt(`next week ${job.attrs.data.jobStopTime}`);
             await job.save();
+
+            const doctorsAppointment = await appointmentModel.find({ doctorId: doctor?._id });
+
+            doctorsAppointment.forEach(async (appointment) => {
+                appointment.done = false;
+                await appointment.save();
+            });
         }
     });
 }

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Schema } from "mongoose";
 import randomstring from "randomstring";
 
-import { scheduleEmailReminder, scheduleSmsReminder } from "../jobs/appointmentJobs";
+import { scheduleEmailReminder } from "../jobs/appointmentJobs";
 import appoinmentsModel from "../models/appointmentsModel";
 import doctorsModel, { appointmentDays } from "../models/doctorsModel";
 
@@ -97,6 +97,45 @@ export const createAppoinment = async (req: Request, res: Response) => {
 
         res.json([appointmentDate, doctorStartTime, doctorEndTime]);
 
+    } catch (err) {
+        res.status(500).json({ msg: "An error occured, Try again later!" });
+        // res.status(500).json(err);
+    }
+}
+
+export const getAllAppointments = async (req: Request<any, any, any, { doctorId: string }>, res: Response) => {
+    try {
+        const allAppointments = await appoinmentsModel.find({ doctorId: req.query.doctorId });
+
+        res.json(allAppointments);
+    } catch (err) {
+        res.status(500).json({ msg: "An error occured, Try again later!" });
+        // res.status(500).json(err);
+    }
+}
+
+export const getSingleAppointment = async (req: Request<any, any, any, { appointmentId: string }>, res: Response) => {
+    try {
+        const appointment = await appoinmentsModel.findOne({ appointmentId: req.query.appointmentId });
+
+        res.json(appointment);
+    } catch (err) {
+        res.status(500).json({ msg: "An error occured, Try again later!" });
+        // res.status(500).json(err);
+    }
+}
+
+export const updateProgress = async (req: Request<any, { appointmentId: string, doctorsNote: string }>, res: Response) => {
+    try {
+        const appointment = await appoinmentsModel.findOneAndUpdate(
+            { appointmentId: req.body.appointmentId }, 
+            { done: true, doctorsNote: req.body.doctorsNote }
+        );
+
+        if (!appointment)
+            return res.status(422).json({status: "Invalid Id", msg: "Could't find appointment Id"});
+
+        res.json({status: "OK", msg: "Saved appointment"});
     } catch (err) {
         res.status(500).json({ msg: "An error occured, Try again later!" });
         // res.status(500).json(err);
