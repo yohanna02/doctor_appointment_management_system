@@ -1,67 +1,211 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthProvider";
+
 function Registeration(props) {
+  const { auth, getUserData } = useAuth();
+  const navigate = useNavigate();
+  const userData = getUserData();
+  const [daysList, setDaysList] = useState([
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ]);
+  const [formValue, setFormValue] = useState({
+    name: auth ? userData.name : "",
+    speciality: auth ? userData.speciality : "",
+    appointmentDays: auth ? userData.appointmentDays : [],
+    availableTimeStart: auth ? userData.availableTimeStart : "",
+    availableTimeEnd: auth ? userData.availableTimeEnd : "",
+    email: auth ? userData.email : "",
+    password: "",
+  });
 
-    return (
-        <div className="Registeration container">
-            <h1>{props.headerValue}</h1>
-            <form action="/" className={props.isFullParentWidthAllowed}>
-                <div>
-                    <label htmlFor="Name">Name </label>
-                    <input id="Name" type="text" title="Name" aria-label="Register Name input" />
-                </div>
-                <div className="timeWrap">
-                    <div>
-                        <label htmlFor="specialty">Specialty </label>
-                        <input id="specialty" type="text" title="specialty" aria-label="Register specialty input" />
-                    </div>
-                </div>
-                <p htmlFor="wrapCheckersID" className="wrapCheckersIDCls">Select Appointment Day</p>
-                <div className="wrapCheckers" id="wrapCheckersID">
-                    <input type="checkbox" value="1" id="Sunday" />
-                    <label htmlFor="Sunday">Sunday</label>
+  function handleChange(e) {
+    const { name, value, attributes, checked } = e.target;
 
-                    <input type="checkbox" value="2" id="Monday" />
-                    <label htmlFor="Monday">Monday</label>
+    if (attributes.type.value !== "checkbox") {
+      setFormValue((preFormValue) => {
+        return {
+          ...preFormValue,
+          [name]: value,
+        };
+      });
 
-                    <input type="checkbox" value="3" id="Tuesday" />
-                    <label htmlFor="Tuesday">Tuesday</label>
+      return;
+    }
 
-                    <input type="checkbox" value="4" id="Wednesday" />
-                    <label htmlFor="Wednesday">Wednesday</label>
+    let updatedList = [...formValue.appointmentDays];
 
-                    <input type="checkbox" value="5" id="Thursday" />
-                    <label htmlFor="Thursday">Thursday</label>
+    if (checked) {
+      updatedList = [...updatedList, value];
+    } else {
+      updatedList.splice(formValue.appointmentDays.indexOf(value), 1);
+    }
+    setFormValue((preFormValue) => {
+      return {
+        ...preFormValue,
+        appointmentDays: updatedList,
+      };
+    });
+  }
 
-                    <input type="checkbox" value="6" id="Friday" />
-                    <label htmlFor="Friday">Friday</label>
+  function isChecked(item) {
+    return formValue.appointmentDays.includes(item);
+  }
 
-                    <input type="checkbox" value="7" id="Satuday" />
-                    <label htmlFor="Satuday">Satuday</label>
-                </div>
-                <div className="timeWrap">
-                    <div>
-                        <label htmlFor="AvailabeleStartTime">Availabele StartTime</label>
-                        <input type="time" id="AvailabeleStartTime" />
-                    </div>
-                    <div>
-                        <label htmlFor="AvailabeleEndTime">Availabele EndTime</label>
-                        <input type="time" id="AvailabeleEndTime" />
-                    </div>
-                </div>
-                <div>
-                    <label htmlFor="Email">Email </label>
-                    <input id="Email" type="text" title="Email" aria-label="Register email input" />
-                </div>
+  function registerDoctor(e) {
+    e.preventDefault();
 
-                <div>
-                    <label htmlFor="password">Password </label>
-                    <input id="password" type="password" title="Password" aria-label="Register password input" />
-                </div>
-                {props.isShowAllowed == true && <div ><button type="submit">Login</button></div>}
-            </form>
-            {props.isShowAllowed == true && <p>Already Registered, login here <Link to="/login">Login here.</Link></p>}
+    console.log(formValue);
+
+    axios
+      .post("/api/v1/doctor/sign-up", {
+        ...formValue,
+        availableTimeStart: `2022-06-25T${formValue.availableTimeStart}:00`,
+        availableTimeEnd: `2022-06-25T${formValue.availableTimeEnd}:00`,
+      })
+      .then(({ data }) => {
+        alert(data.msg);
+
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  return (
+    <div className="Registeration container">
+      <h1>{props.headerValue}</h1>
+      <form
+        action="/"
+        className={props.isFullParentWidthAllowed}
+        onSubmit={registerDoctor}
+      >
+        <div>
+          <label htmlFor="Name">Name </label>
+          <input
+            id="Name"
+            type="text"
+            title="Name"
+            name="name"
+            value={formValue.name}
+            onChange={handleChange}
+            aria-label="Register Name input"
+            autoComplete="name"
+            required
+            disabled={auth}
+          />
         </div>
-    );
+        <div className="timeWrap">
+          <div>
+            <label htmlFor="specialty">Speciality </label>
+            <input
+              id="specialty"
+              type="text"
+              title="speciality"
+              name="speciality"
+              value={formValue.speciality}
+              onChange={handleChange}
+              aria-label="Register specialty input"
+              autoComplete="organization-title"
+              required
+              disabled={auth}
+            />
+          </div>
+        </div>
+        <p htmlFor="wrapCheckersID" className="wrapCheckersIDCls">
+          Select Appointment Day
+        </p>
+        <div className="wrapCheckers" id="wrapCheckersID">
+          {daysList.map((day, index) => (
+            <>
+              <input
+                type="checkbox"
+                value={day}
+                id={day}
+                onChange={handleChange}
+                checked={isChecked(day)}
+                disabled={auth}
+              />
+              <label htmlFor={day}>{day}</label>
+            </>
+          ))}
+        </div>
+        <div className="timeWrap">
+          <div>
+            <label htmlFor="AvailabeleStartTime">Availabele StartTime</label>
+            <input
+              type="time"
+              id="AvailabeleStartTime"
+              value={formValue.availableTimeStart}
+              name="availableTimeStart"
+              onChange={handleChange}
+              required
+              disabled={auth}
+            />
+          </div>
+          <div>
+            <label htmlFor="AvailabeleEndTime">Availabele EndTime</label>
+            <input
+              type="time"
+              id="AvailabeleEndTime"
+              value={formValue.availableTimeEnd}
+              name="availableTimeEnd"
+              onChange={handleChange}
+              required
+              disabled={auth}
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="Email">Email </label>
+          <input
+            id="Email"
+            type="text"
+            title="Email"
+            value={formValue.email}
+            name="email"
+            onChange={handleChange}
+            required
+            aria-label="Register email input"
+            autoComplete="email"
+            disabled={auth}
+          />
+        </div>
+        {!auth && <div>
+          <label htmlFor="password">Password </label>
+          <input
+            id="password"
+            type="password"
+            title="Password"
+            value={formValue.password}
+            name="password"
+            onChange={handleChange}
+            required
+            autoComplete="new-password"
+            aria-label="Register password input"
+          />
+        </div>}
+        {props.isShowAllowed && (
+          <div>
+            <button type="submit">Register</button>
+          </div>
+        )}
+      </form>
+      {props.isShowAllowed && (
+        <p>
+          Already Registered, <Link to="/login">Login here.</Link>
+        </p>
+      )}
+    </div>
+  );
 }
 
 export default Registeration;

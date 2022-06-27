@@ -213,6 +213,19 @@
         overflow-y: scroll;
         margin-bottom: calc($baseRem - .5rem);
 
+        .search {
+            label {
+                color: white;
+            }
+
+            input {
+                margin-bottom: 1rem;
+                margin-left: .5rem;
+                padding: .5rem;
+                width: 20rem;
+            }
+        }
+
 
         table {
             width: inherit;
@@ -229,6 +242,11 @@
                 height: fit-content !important;
                 background-color: $primaryBlue;
                 padding: calc($baseRem /2.5) 0 calc($baseRem /2.5) calc($baseRem /2.5);
+
+                a {
+                    color: white;
+                    text-decoration: underline;
+                }
 
                 button {
                     @include btn_base_style;
@@ -401,6 +419,12 @@
                 width: inherit;
                 padding: calc($baseRem) 0;
                 border-radius: 5px;
+            }
+
+            input {
+                &:disabled {
+                    background-color: white;
+                }
             }
 
             input {

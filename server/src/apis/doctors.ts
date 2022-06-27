@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { doctorInfo, login, signup } from "../controllers/doctorsController";
+import { doctorInfo, getAllDoctorsInfo, login, signup } from "../controllers/doctorsController";
 import { Doctors } from "../models/doctorsModel";
 import validator from "../utils/validator";
 import { doctorsSignupSchema, doctorLoginSchema } from "../utils/validatorSchema";
@@ -23,5 +23,7 @@ router.post("/login", (req: Request<any, any, {email: string, password: string}>
 }, login);
 
 router.get("/info", isAuth, doctorInfo);
+
+router.get("/get-all-doctors", getAllDoctorsInfo);
 
 export default router;

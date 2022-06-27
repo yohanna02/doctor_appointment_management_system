@@ -17,7 +17,7 @@ function DoctorDashBoard(props) {
                         </nav>
                     </div>
                     <div className="main">
-                        <Registeration isShowAllowed={false} isFullParentWidthAllowed="fullWidth" headerValue="Doctors' Profile" />
+                        <Registeration isShowAllowed={false} isFullParentWidthAllowed="fullWidth" headerValue="Doctor's Profile" />
                     </div>
                 </div>
             </div>

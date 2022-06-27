@@ -51,7 +51,7 @@ export const signup = async (req: Request<any, any, Doctors>, res: Response) => 
                 appointmentDays, 
                 availableTimeStart, 
                 availableTimeEnd, 
-                doctor._id
+                doctor?._id
             );
         }
 
@@ -87,9 +87,10 @@ export const login = async (req: Request<any, any, { email: string, password: st
     }
 };
 
-export const doctorInfo = async (req: Request, res: Response<any, Doctors>) => {
+export const doctorInfo = async (req: Request, res: Response<any, Doctors & { _id: string }>) => {
     try {
         const doctorInfo = {
+            _id: res.locals._id,
             email: res.locals.email,
             name: res.locals.name,
             speciality: res.locals.speciality,
@@ -99,6 +100,34 @@ export const doctorInfo = async (req: Request, res: Response<any, Doctors>) => {
         };
 
         res.json(doctorInfo);
+
+    } catch (err) {
+        res.status(500).json({ msg: "An error occured, Try again later!" });
+        // res.status(500).json(err);
+    }
+}
+
+export const getAllDoctorsInfo = async (req: Request, res: Response) => {
+    try {
+        const doctors = await doctorsModel.find();
+
+        // const filteredDoctors = doctors.filter(doctor => {
+        //     return doctor.makeAppointment === true;
+        // });
+
+        const formattedDoctors = doctors.map(doctor => {
+            return {
+                _id: doctor._id,
+                name: doctor.name,
+                speciality: doctor.speciality,
+                appointmentDays: doctor.appointmentDays,
+                availableTimeStart: doctor.availableTimeStart,
+                availableTimeEnd: doctor.availableTimeEnd,
+                email: doctor.email
+            }
+        });
+
+        res.json(formattedDoctors);
 
     } catch (err) {
         res.status(500).json({ msg: "An error occured, Try again later!" });

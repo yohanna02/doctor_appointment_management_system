@@ -18,7 +18,7 @@ function DoctorDashBoard() {
                     </div>
                     <div className="main">
                         <h1>Appointment Management</h1>
-                        <AppointmentTable baseView={true}/>
+                        <AppointmentTable baseView={false}/>
                     </div>
                 </div>
             </div>

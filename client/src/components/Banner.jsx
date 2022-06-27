@@ -6,7 +6,7 @@ function Banner() {
                 <h1>Online Doctor Appointment Management System</h1>
                 <p>Set an appointment with your doctor, makes life easier for you and your Doc...</p>
             </div>
-            <AppointmentTable baseView={false}/>
+            <AppointmentTable baseView={true}/>
         </div>
     );
 }
