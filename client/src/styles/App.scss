@@ -261,15 +261,20 @@
                     }
 
                 }
-                .completed, .notcompleted, .inprogress {
+
+                .completed,
+                .notcompleted,
+                .inprogress {
                     background-color: green;
                     padding: calc($baseRem/3);
                     margin: calc($baseRem/.5) 0;
                     border-radius: 5px;
                 }
+
                 .notcompleted {
                     background-color: #f6c23e;
                 }
+
                 .inprogress {
                     background-color: rgb(78, 115, 223);
                 }
@@ -552,6 +557,84 @@
                 color: white;
                 padding: calc($baseRem*3.5) 0 calc($baseRem*8) 0;
                 text-align: center;
+            }
+        }
+    }
+}
+
+.creatAppointments {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: fit-content;
+
+    h1 {
+        color: white;
+        padding: calc($baseRem) 0;
+    }
+
+    * a {
+        color: white;
+        text-decoration: underline;
+
+        &:hover {
+            color: darken($color: $primaryBlue, $amount: 20%);
+        }
+    }
+
+    p {
+        display: block;
+        text-align: left;
+        color: white;
+    }
+
+    form {
+        width: calc(100% / 2);
+        height: fit-content;
+        display: inherit;
+        flex-direction: inherit;
+        justify-content: inherit;
+        align-items: inherit;
+
+        div {
+            width: 100%;
+            display: inherit;
+            flex-direction: inherit;
+            justify-content: inherit;
+            color: white;
+            font-size: 1.2rem;
+            text-align: left;
+            margin: calc($baseRem / 1.5);
+
+            label,
+            input,
+            textarea,
+            button,
+            select {
+                width: inherit;
+                padding: calc($baseRem) 0;
+                border-radius: 5px;
+            }
+
+            input,
+            textarea {
+                text-indent: calc($baseRem / 1.5);
+            }
+
+            button {
+                background-color: lighten($color: $primaryBlue, $amount: 10%);
+                box-shadow: .5px .5px 5px darken($color: $primaryBlue, $amount: 50%);
+                font-size: calc($baseRem*1.2);
+                color: white;
+
+                &:hover {
+                    background-color: darken($color: $primaryBlue, $amount: 20%);
+                }
+            }
+
+            label {
+                padding: 0 0 calc($baseRem) 0;
             }
         }
     }

@@ -50,8 +50,6 @@ $baseContainer: 95%;
 }
 
 
-
-
 // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
 // Resets / Containers
@@ -94,7 +92,7 @@ button {
 
 html {
     scroll-behavior: smooth;
-    min-height: 100vh;
+    min-height: fit-content;
 }
 
 body {
