@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Nav from "../components/HomeNav";
 import AppointmentTable from "../components/AppointmentTable";
 
-function DoctorDashBoard() {
+function DoctorsAppoinment() {
 
     return (
         <>
@@ -26,4 +26,4 @@ function DoctorDashBoard() {
     );
 }
 
-export default DoctorDashBoard;
+export default DoctorsAppoinment;

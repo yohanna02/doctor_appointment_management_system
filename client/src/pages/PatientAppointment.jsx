@@ -1,11 +1,11 @@
 import AppointmentForm from "../components/AppointmentForm";
 
-function CreateAppointment() {
+function PatientAppointment() {
   return (
     <div className="creatAppointments container">
-      <AppointmentForm doctorsView={false} />
+      <AppointmentForm doctorsView={true} publicView={true} />
     </div>
-  );
+  )
 }
 
-export default CreateAppointment;
+export default PatientAppointment;

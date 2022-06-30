@@ -95,7 +95,7 @@ export const createAppoinment = async (req: Request, res: Response) => {
 
         await scheduleEmailReminder(savedAppointment);
 
-        res.json([appointmentDate, doctorStartTime, doctorEndTime]);
+        res.json({status: "OK", msg: "Appointment Create successfully"});
 
     } catch (err) {
         res.status(500).json({ msg: "An error occured, Try again later!" });
@@ -135,7 +135,7 @@ export const updateProgress = async (req: Request<any, { appointmentId: string, 
         if (!appointment)
             return res.status(422).json({status: "Invalid Id", msg: "Could't find appointment Id"});
 
-        res.json({status: "OK", msg: "Saved appointment"});
+        res.json({status: "OK", msg: "Saved"});
     } catch (err) {
         res.status(500).json({ msg: "An error occured, Try again later!" });
         // res.status(500).json(err);

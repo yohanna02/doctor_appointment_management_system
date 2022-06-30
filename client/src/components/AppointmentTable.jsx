@@ -83,6 +83,11 @@ function AppointmentTable(props) {
   function searchAppointment(e) {
     e.preventDefault();
 
+    if (props.baseView) {
+      navigate(`/appointment/${searchValue}`);
+      return;
+    }
+
     axios
       .get(`/api/v1/appointment/get-appointment?appointmentId=${searchValue}`, {
         headers: {
@@ -114,7 +119,6 @@ function AppointmentTable(props) {
   return (
     <div className="appointmentTable container">
       <div className="appoitmentLists">
-        {!props.baseView && 
         <form onSubmit={searchAppointment} className="search">
           <label htmlFor="search">Search Appointment</label>
           <input 
@@ -125,7 +129,7 @@ function AppointmentTable(props) {
             onChange={searchHandler}
             required
           />
-        </form>}
+        </form>
         <table>
           <thead>
             {props.baseView ? <th>Doctor Name </th> : <th>Appointment ID</th>}
@@ -152,7 +156,7 @@ function AppointmentTable(props) {
                 <td>{doctor.appointmentDays.join(", ")}</td>
                 <td>{doctor.time}</td>                            
                 <td>
-                  <button onClick={() => {navigate("/createappointment")}}>Get Appointment</button>
+                  <button onClick={() => {navigate(`/createappointment/${doctor._id}`)}}>Get Appointment</button>
                 </td>
             </tr>   
           ))}</tbody>}
