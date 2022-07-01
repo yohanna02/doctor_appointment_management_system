@@ -36,12 +36,15 @@ function AppointmentTable(props) {
     if (props.baseView) {
       axios.get("/api/v1/doctor/get-all-doctors").then(({ data }) => {
           const formatted = data.map(d => {
-            const [hour, minute] = d.availableTimeStart.split("T")[1].split(":");
-            const [hourEnd, minuteEnd] = d.availableTimeEnd.split("T")[1].split(":");
+            const startTime = new Date(d.availableTimeStart);
+            const endTime = new Date(d.availableTimeEnd);
+            // console.log(d);
+            // const [hour, minute] = d.availableTimeStart.split("T")[1].split(":");
+            // const [hourEnd, minuteEnd] = d.availableTimeEnd.split("T")[1].split(":");
 
             return {
               ...d,
-              time: `${hour}:${minute} - ${hourEnd}:${minuteEnd}`
+              time: `${startTime.getHours()}:${startTime.getMinutes()} - ${endTime.getHours()}:${endTime.getMinutes()}`
             }
           });
 
