@@ -13,14 +13,14 @@ dotenv.config();
 
 const app = express();
 
-mongoose.connect(process.env.DB_CONNECT as string)
+mongoose.connect("mongodb://localhost:27017/docter_appointment_management_system")
 .then(() => {
     console.log("Connected to mongodb server successfully");
 }).catch((err) => {
     throw err;
 });
 
-export const agenda = new Agenda({ db: { address: process.env.DB_CONNECT as string } });
+export const agenda = new Agenda({ db: { address: "mongodb://localhost:27017/docter_appointment_management_system" } });
 (async function () {
     initAppointmentJob(agenda);
     await agenda.start();
