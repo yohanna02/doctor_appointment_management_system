@@ -1,0 +1,22 @@
+{
+  "name": "doctor_appointment_management_system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "cd ./client && npm install && cd ../server && npm install",
+    "start": "docker-compose up --detach && cd ./server && npm run dev",
+    "client": "cd ./client && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yohanna02/doctor_appointment_management_system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yohanna02/doctor_appointment_management_system/issues"
+  },
+  "homepage": "https://github.com/yohanna02/doctor_appointment_management_system#readme"
+}
