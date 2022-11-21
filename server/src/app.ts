@@ -13,7 +13,7 @@ dotenv.config();
 
 const app = express();
 
-mongoose.connect("mongodb://localhost:27017/docter_appointment_management_system")
+mongoose.connect("mongodb+srv://yohanna02:bbPSTFu3NkHTfoB6fgK8@cluster0.joi010b.mongodb.net/?retryWrites=true&w=majority")
 .then(() => {
     console.log("Connected to mongodb server successfully");
 }).catch((err) => {
