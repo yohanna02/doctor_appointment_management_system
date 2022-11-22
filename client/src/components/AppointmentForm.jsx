@@ -20,7 +20,7 @@ function AppointmentForm(props) {
     if (props.doctorsView) {
       axios
         .get(
-          `https://doctor-appointment-management-system-client.vercel.app/api/v1/appointment/get-appointment?appointmentId=${appointmentId}`
+          `https://doctor-appointment-management-system.onrender.com/api/v1/appointment/get-appointment?appointmentId=${appointmentId}`
         )
         .then(({ data }) => {
           setFormData((prevFormData) => {
@@ -50,7 +50,7 @@ function AppointmentForm(props) {
 
     if (!props.doctorsView) {
       axios
-        .post("https://doctor-appointment-management-system-client.vercel.app/api/v1/appointment/make-appointment", {
+        .post("https://doctor-appointment-management-system.onrender.com/api/v1/appointment/make-appointment", {
           personName: formData.personName,
           email: formData.email,
           phoneNo: formData.phoneNo,
@@ -81,7 +81,7 @@ function AppointmentForm(props) {
 
     axios
       .post(
-        "https://doctor-appointment-management-system-client.vercel.app/api/v1/appointment/update-progress",
+        "https://doctor-appointment-management-system.onrender.com/api/v1/appointment/update-progress",
         {
           appointmentId: appointmentId,
           doctorsNote: formData.doctorsNote,
