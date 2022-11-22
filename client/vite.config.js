@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     proxy: {
-      "/api": "http://localhost:3001"
+      "/api": "https://doctor-appointment-management-system.onrender.com"
     }
   }
 })
