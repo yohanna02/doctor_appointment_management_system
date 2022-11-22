@@ -1,1 +1,0 @@
-# doctor_appointment_management_system

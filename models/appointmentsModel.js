@@ -1,18 +1,8 @@
-import { Schema, model } from "mongoose";
-
-export interface Appointment {
-    personName: string;
-    email: string;
-    phoneNo: string;
-    date: Date;
-    reason: string;
-    doctorId: Schema.Types.ObjectId;
-    appointmentId: string;
-    done: boolean;
-    doctorsNote: string;
-};
-
-const appointmentSchema = new Schema<Appointment>({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+;
+const appointmentSchema = new mongoose_1.Schema({
     personName: {
         type: String,
         required: true
@@ -34,7 +24,7 @@ const appointmentSchema = new Schema<Appointment>({
         required: true
     },
     doctorId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose_1.Schema.Types.ObjectId,
         required: true
     },
     appointmentId: {
@@ -47,7 +37,5 @@ const appointmentSchema = new Schema<Appointment>({
     },
     doctorsNote: String
 });
-
-const appointmentModel = model<Appointment>("appointment", appointmentSchema);
-
-export default appointmentModel;
+const appointmentModel = (0, mongoose_1.model)("appointment", appointmentSchema);
+exports.default = appointmentModel;

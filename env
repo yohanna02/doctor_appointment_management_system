@@ -1,0 +1,13 @@
+PORT=3001
+DB_CONNECT=mongodb://localhost:27017/docter_appointment_management_system
+
+JWT_STRATEGY_SERECT=sdvmdslkfbvlkdfnv09jg0ejrgbpvosdmpovmds0fgvj0e-rgjpewrmvpb
+
+CONTACT_MAIL_HOST=mail.nascomsoft.com
+CONTACT_MAIL_USER=admin@nascomsoft.com
+CONTACT_MAIL_PASS=nascomsoft@admin
+CONTACT_MAIL_NAME=Online appointment system
+
+TWILIO_ACCOUNT_SID=ACaa0c4fa90c4f0b6329a6a1a6743c48bc
+TWILIO_AUTH_TOKEN=0dab871c9dcedf4118ada6caed308acd
+PHONE_NO=+19805492632

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.ts",
+    "start": "node app.js",
     "debugger": "nodemon --watch . -e ts --exec node --inspect -r ts-node/register src/app.ts"
   },
   "keywords": [],
