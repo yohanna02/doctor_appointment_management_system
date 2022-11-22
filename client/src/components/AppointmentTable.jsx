@@ -34,7 +34,7 @@ function AppointmentTable(props) {
 
   useEffect(() => {
     if (props.baseView) {
-      axios.get("/api/v1/doctor/get-all-doctors").then(({ data }) => {
+      axios.get("https://doctor-appointment-management-system-client.vercel.app/api/v1/doctor/get-all-doctors").then(({ data }) => {
           const formatted = data.map(d => {
             const startTime = new Date(d.availableTimeStart);
             const endTime = new Date(d.availableTimeEnd);
@@ -51,7 +51,7 @@ function AppointmentTable(props) {
           setDoctors(formatted);
       });
     } else {
-      axios.get(`/api/v1/appointment/get-all-appointments?doctorId=${doctorsData._id}`, {
+      axios.get(`https://doctor-appointment-management-system-client.vercel.app/api/v1/appointment/get-all-appointments?doctorId=${doctorsData._id}`, {
         headers: {
           Authorization: token
         }
@@ -92,7 +92,7 @@ function AppointmentTable(props) {
     }
 
     axios
-      .get(`/api/v1/appointment/get-appointment?appointmentId=${searchValue}`, {
+      .get(`https://doctor-appointment-management-system-client.vercel.app/api/v1/appointment/get-appointment?appointmentId=${searchValue}`, {
         headers: {
           Authorization: token
         }

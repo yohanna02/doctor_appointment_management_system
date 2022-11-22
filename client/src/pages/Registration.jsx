@@ -65,7 +65,7 @@ function Registeration(props) {
     console.log(formValue);
 
     axios
-      .post("/api/v1/doctor/sign-up", {
+      .post("https://doctor-appointment-management-system-client.vercel.app/api/v1/doctor/sign-up", {
         ...formValue,
         availableTimeStart: `2022-06-25T${formValue.availableTimeStart}:00`,
         availableTimeEnd: `2022-06-25T${formValue.availableTimeEnd}:00`,

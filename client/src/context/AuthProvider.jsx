@@ -14,8 +14,8 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState("");
 
   async function login(formValue) {
-    const { data } = await axios.post("/api/v1/doctor/login", formValue);
-    const userRes = await axios.get("/api/v1/doctor/info", {
+    const { data } = await axios.post("https://doctor-appointment-management-system-client.vercel.app/api/v1/doctor/login", formValue);
+    const userRes = await axios.get("https://doctor-appointment-management-system-client.vercel.app/api/v1/doctor/info", {
         headers: {
             Authorization: `Bearer ${data.token}`
         }
