@@ -1,0 +1,5 @@
+{
+    "rewrites": [
+        { "source": "/api", "destination": "https://doctor-appointment-management-system.onrender.com" }
+    ]
+}
